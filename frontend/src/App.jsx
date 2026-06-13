@@ -18,7 +18,7 @@ export default function App() {
   const [currentHash, setCurrentHash] = useState(window.location.hash || '#/');
   const [viewParams, setViewParams] = useState({});
 
-  const API_URL = 'http://localhost:5050/api';
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5050/api';
 
   // Listen to hash changes for routing
   useEffect(() => {

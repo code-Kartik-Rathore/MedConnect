@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { Send, User as UserIcon, Image as ImageIcon, Video, Phone, PhoneOff, Mic, MicOff, VideoOff } from 'lucide-react';
+import { useAuth } from '../App';
 
 export default function ChatRoom({ appointmentId, currentUser, partnerName }) {
+  const { API_URL } = useAuth();
+  const socketBaseUrl = API_URL.endsWith('/api') ? API_URL.slice(0, -4) : API_URL;
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [uploading, setUploading] = useState(false);
@@ -36,7 +39,7 @@ export default function ChatRoom({ appointmentId, currentUser, partnerName }) {
 
   useEffect(() => {
     // Connect to Socket.io server
-    socketRef.current = io('http://localhost:5050', {
+    socketRef.current = io(socketBaseUrl, {
       withCredentials: true
     });
 
@@ -131,7 +134,7 @@ export default function ChatRoom({ appointmentId, currentUser, partnerName }) {
     const reader = new FileReader();
     reader.onloadend = async () => {
       try {
-        const res = await fetch('http://localhost:5050/api/auth/upload', {
+        const res = await fetch(`${API_URL}/auth/upload`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
