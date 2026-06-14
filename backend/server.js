@@ -16,9 +16,14 @@ const reportRoutes = require('./routes/reportRoutes');
 const app = express();
 const server = http.createServer(app);
 
-// Configure CORS
+// Configure CORS (normalize trailing slashes)
+let frontendOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
+if (frontendOrigin.endsWith('/')) {
+  frontendOrigin = frontendOrigin.slice(0, -1);
+}
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: frontendOrigin,
   credentials: true
 }));
 
@@ -39,10 +44,10 @@ app.get('/health', (req, res) => {
   res.json({ status: 'healthy', database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected' });
 });
 
-// Configure Socket.io for Consultation Rooms
+// Configure Socket.io for Consultation Rooms (normalize trailing slashes)
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: frontendOrigin,
     methods: ['GET', 'POST'],
     credentials: true
   }

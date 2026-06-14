@@ -18,7 +18,14 @@ export default function App() {
   const [currentHash, setCurrentHash] = useState(window.location.hash || '#/');
   const [viewParams, setViewParams] = useState({});
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5050/api';
+  let rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5050/api';
+  if (rawApiUrl.endsWith('/')) {
+    rawApiUrl = rawApiUrl.slice(0, -1);
+  }
+  if (!rawApiUrl.endsWith('/api')) {
+    rawApiUrl = `${rawApiUrl}/api`;
+  }
+  const API_URL = rawApiUrl;
 
   // Listen to hash changes for routing
   useEffect(() => {
