@@ -78,7 +78,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .glass-panel:hover {
   border-color: rgba(13, 148, 136, 0.25);
-  transform: translateY(-6px) rotateX(1deg) rotateY(1.5deg);
   box-shadow: 
     0 20px 40px -15px rgba(15, 23, 42, 0.12),
     0 0 20px rgba(13, 148, 136, 0.06),
