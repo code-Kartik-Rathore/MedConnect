@@ -14,7 +14,7 @@ The platform supports booking availability slots, processing secure payments, co
 *   **Admin Dashboard:** Platform-wide oversight of patients, doctors, and appointments, including registration approvals and service health monitoring.
 
 ### 🧠 Gemini AI Report Analyzer
-*   **PDF Extraction:** Upload digital medical reports (PDFs) and extract raw text using `pdfplumber`.
+*   **PDF Extraction:** Upload digital medical reports (PDFs) and extract raw text using `pypdf`.
 *   **Structured Diagnostics:** Analyzes medical reports to output structured summaries, clinical severity levels, flagged out-of-bounds parameters, and next steps using Gemini 2.5 Flash.
 *   **Smart Specialist Routing:** Recommends specific medical specialties based on clinical abnormalities found in reports.
 *   **Patient-Friendly Explanation:** Simplifies complex medical jargon into warm, easy-to-understand explanations.
@@ -28,7 +28,7 @@ The platform supports booking availability slots, processing secure payments, co
 *   **Socket.io Chatrooms:** Instantly connect patients and doctors when consultations begin. Keep logs of all clinical chat history securely in MongoDB.
 
 ### 📄 Digital Prescriptions & Alerts
-*   **PDF Generation:** Doctors generate official digital prescriptions on-the-fly using `pdfplumber` / `PDFKit`.
+*   **PDF Generation:** Doctors generate official digital prescriptions on-the-fly using `PDFKit`.
 *   **Email Notifications:** Email updates for bookings and payment transactions via Resend and Nodemailer.
 
 ---
@@ -113,7 +113,7 @@ Upload clinical lab PDFs for instant structured analysis and chat interactively 
 ### AI Service
 *   **Framework:** FastAPI, Python 3
 *   **Server:** Uvicorn
-*   **Parsing:** pdfplumber (PDF text extraction)
+*   **Parsing:** pypdf (PDF text extraction)
 *   **Client:** HTTPX (Asynchronous REST clients)
 *   **LLM API:** Google Gemini 2.5 Flash API (with Grok API fallbacks)
 
