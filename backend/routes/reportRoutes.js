@@ -71,7 +71,21 @@ router.post('/upload', protect, async (req, res) => {
     if (!aiRes.ok) {
       const errorText = await aiRes.text();
       console.error(`FastAPI returned status ${aiRes.status}: ${errorText}`);
-      return res.status(502).json({ message: `AI analysis service failed: ${errorText}` });
+      
+      let clientMessage = 'AI analysis service failed to process the request.';
+      try {
+        const errJson = JSON.parse(errorText);
+        if (errJson && errJson.detail) {
+          clientMessage = errJson.detail;
+        }
+      } catch (e) {
+        if (errorText.includes('502') || errorText.includes('Bad Gateway')) {
+          clientMessage = 'The AI analysis service is temporarily busy, timed out, or crashed due to server memory limits. Please try uploading a smaller or digital (not scanned) PDF report.';
+        } else {
+          clientMessage = `AI analysis service failed: ${errorText.substring(0, 150)}`;
+        }
+      }
+      return res.status(aiRes.status).json({ message: clientMessage });
     }
 
     const aiData = await aiRes.json();

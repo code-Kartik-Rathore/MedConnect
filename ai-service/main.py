@@ -5,7 +5,7 @@ from typing import Optional, List
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import pdfplumber
+from pypdf import PdfReader
 import httpx
 
 # Set up logging
@@ -117,15 +117,15 @@ async def analyze_report(file: UploadFile = File(...)):
 
     extracted_text = ""
     try:
-        # Extract text page-by-page using pdfplumber
+        # Extract text page-by-page using pypdf (low memory usage)
         logger.info(f"Extracting text from PDF file: {file.filename}")
-        with pdfplumber.open(file.file) as pdf:
-            for i, page in enumerate(pdf.pages):
-                page_text = page.extract_text()
-                if page_text:
-                    extracted_text += f"--- Page {i+1} ---\n{page_text}\n"
+        reader = PdfReader(file.file)
+        for i, page in enumerate(reader.pages):
+            page_text = page.extract_text()
+            if page_text:
+                extracted_text += f"--- Page {i+1} ---\n{page_text}\n"
     except Exception as e:
-        logger.exception("Failed to parse PDF with pdfplumber")
+        logger.exception("Failed to parse PDF with pypdf")
         raise HTTPException(status_code=500, detail=f"Failed to extract text from PDF: {str(e)}")
 
     extracted_text = extracted_text.strip()
